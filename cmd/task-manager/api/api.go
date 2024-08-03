@@ -26,7 +26,12 @@ func (api *APIServer) Run() error {
 	tasksHandler.RegisterRoutes(subrouter)
 
 	// Serve static files
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
+	router.PathPrefix("/files").Handler(http.FileServer(http.Dir("static")))
+	// Registering NotFound handler
+	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Not Found 46564"))
+	})
 
 	return http.ListenAndServe(fmt.Sprintf(":%d", api.port), router)
 }

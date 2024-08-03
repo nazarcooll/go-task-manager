@@ -12,8 +12,8 @@ func NewHandler() Handler {
 	return Handler{}
 }
 
-func (r *Handler) RegisterRoutes(mux *mux.Router) *mux.Route {
-	v1Route := mux.PathPrefix("/v1").Subrouter()
-
-	return v1Route.HandleFunc("/tasks", v1.TasksV1Handler)
+func (r *Handler) RegisterRoutes(route *mux.Router) {
+	route.HandleFunc("/tasks", v1.TasksV1Handler)
+	route = route.PathPrefix("/v1").Subrouter()
+	route.HandleFunc("/tasks", v1.TasksV1Handler)
 }

@@ -38,8 +38,8 @@ func initConfig() Config {
 		JWTExpirationInSeconds: getEnvAsUint("JWT_EXPIRATION_IN_SECONDS", 3600*24*7),
 	}
 
-	config.ConnectionString = fmt.Sprintf("postgresql://%s@%s:%d/%s?connect_timeout=10&application_name=task-manager",
-		config.DBUser, config.DBPassword, config.DBPort, config.DBName)
+	config.ConnectionString = fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?connect_timeout=10&application_name=task-manager",
+		config.DBUser, config.DBPassword, config.DBHost, config.DBPort, config.DBName)
 
 	return config
 }
