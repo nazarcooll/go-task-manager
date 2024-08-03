@@ -1,6 +1,6 @@
 # Config file for [Air](https://github.com/cosmtrek/air) in TOML format
 root = "."
-tmp_dir = "tmp"
+tmp_dir = ".bin"
 
 [build]
 cmd = "make build-debug"

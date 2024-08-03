@@ -9,6 +9,7 @@ USER vscode
 RUN go install github.com/air-verse/air@latest
 RUN go install github.com/jackc/tern/v2@latest
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
+RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 USER root
 
 CMD ["air", "-c", ".air.toml"]

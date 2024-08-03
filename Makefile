@@ -7,11 +7,20 @@ clean:
 build-debug: clean
 	 go build -gcflags=all="-N -l" -o ./.bin/$(BINARY_NAME)-debug ./cmd/task-manager/main.go
 
+build: clean
+	 go build -o ./.bin/$(BINARY_NAME) ./cmd/task-manager/main.go
+
+start: build
+	./.bin/task-manager
+
+air:
+	@air -c attach-air.toml
+
 migration:
-	cd cmd/migrations && tern new $(filter-out $@,$(MAKECMDGOALS))
+	@cd cmd/migrations && tern new $(filter-out $@,$(MAKECMDGOALS))
 
 migrate-up:
-	cd cmd/migrations && tern migrate -d 1
+	cd cmd/migrations && tern migrate -d +1
  
 migrate-down:
 	cd cmd/migrations && tern migrate -d -1
