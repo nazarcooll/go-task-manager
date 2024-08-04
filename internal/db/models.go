@@ -8,13 +8,13 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type TaskManagerTeam struct {
+type Team struct {
 	ID        int64
 	Name      string
 	CreatedAt pgtype.Timestamptz
 }
 
-type TaskManagerUser struct {
+type User struct {
 	ID          int64
 	Password    string
 	LastLogin   pgtype.Timestamptz
@@ -26,7 +26,7 @@ type TaskManagerUser struct {
 	CreatedAt   pgtype.Timestamptz
 }
 
-type TaskManagerWorkItem struct {
+type WorkItem struct {
 	ID          int64
 	ReportedBy  int64
 	AssignedTo  pgtype.Int8
@@ -37,7 +37,7 @@ type TaskManagerWorkItem struct {
 	CreatedAt   pgtype.Timestamptz
 }
 
-type TaskManagerWorkItemComment struct {
+type WorkItemComment struct {
 	ID          int64
 	ReportedBy  int64
 	Description pgtype.Text

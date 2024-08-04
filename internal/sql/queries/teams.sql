@@ -1,13 +1,13 @@
 -- name: GetTeam :one
-SELECT * FROM task_manager_teams
+SELECT * FROM teams
 WHERE id = $1 LIMIT 1;
 
 -- name: ListTeam :many
-SELECT * FROM task_manager_teams
+SELECT * FROM teams
 ORDER BY name;
 
 -- name: CreateTeam :one
-INSERT INTO task_manager_teams (
+INSERT INTO teams (
    name
 ) VALUES (
   $1
@@ -15,11 +15,11 @@ INSERT INTO task_manager_teams (
 RETURNING *;
 
 -- name: UpdateTeam :exec
-UPDATE task_manager_teams
+UPDATE teams
   set name = $2
 WHERE id = $1
 RETURNING *;
 
 -- name: DeleteTeam :exec
-DELETE FROM task_manager_teams
+DELETE FROM teams
 WHERE id = $1;

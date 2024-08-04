@@ -10,7 +10,7 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO task_manager_users (
+INSERT INTO users (
    email, username, first_name, last_name, is_superuser
 ) VALUES (
   $1, $2, $3, $4, $5
@@ -26,7 +26,7 @@ type CreateUserParams struct {
 	IsSuperuser bool
 }
 
-func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (TaskManagerUser, error) {
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(ctx, createUser,
 		arg.Email,
 		arg.Username,
@@ -34,7 +34,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (TaskMan
 		arg.LastName,
 		arg.IsSuperuser,
 	)
-	var i TaskManagerUser
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Password,
@@ -50,7 +50,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (TaskMan
 }
 
 const deleteUser = `-- name: DeleteUser :exec
-DELETE FROM task_manager_users
+DELETE FROM users
 WHERE id = $1
 `
 
@@ -60,13 +60,13 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, password, last_login, is_superuser, username, first_name, last_name, email, created_at FROM task_manager_users
+SELECT id, password, last_login, is_superuser, username, first_name, last_name, email, created_at FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int64) (TaskManagerUser, error) {
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, id)
-	var i TaskManagerUser
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Password,
@@ -82,19 +82,19 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (TaskManagerUser, error
 }
 
 const listUser = `-- name: ListUser :many
-SELECT id, password, last_login, is_superuser, username, first_name, last_name, email, created_at FROM task_manager_users
+SELECT id, password, last_login, is_superuser, username, first_name, last_name, email, created_at FROM users
 ORDER BY email
 `
 
-func (q *Queries) ListUser(ctx context.Context) ([]TaskManagerUser, error) {
+func (q *Queries) ListUser(ctx context.Context) ([]User, error) {
 	rows, err := q.db.Query(ctx, listUser)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []TaskManagerUser
+	var items []User
 	for rows.Next() {
-		var i TaskManagerUser
+		var i User
 		if err := rows.Scan(
 			&i.ID,
 			&i.Password,
@@ -117,7 +117,7 @@ func (q *Queries) ListUser(ctx context.Context) ([]TaskManagerUser, error) {
 }
 
 const updateUser = `-- name: UpdateUser :exec
-UPDATE task_manager_users
+UPDATE users
   set username = $2,
   email = $3,
   first_name = $4, 

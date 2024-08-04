@@ -10,7 +10,7 @@ import (
 )
 
 const createTeam = `-- name: CreateTeam :one
-INSERT INTO task_manager_teams (
+INSERT INTO teams (
    name
 ) VALUES (
   $1
@@ -18,15 +18,15 @@ INSERT INTO task_manager_teams (
 RETURNING id, name, created_at
 `
 
-func (q *Queries) CreateTeam(ctx context.Context, name string) (TaskManagerTeam, error) {
+func (q *Queries) CreateTeam(ctx context.Context, name string) (Team, error) {
 	row := q.db.QueryRow(ctx, createTeam, name)
-	var i TaskManagerTeam
+	var i Team
 	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
 	return i, err
 }
 
 const deleteTeam = `-- name: DeleteTeam :exec
-DELETE FROM task_manager_teams
+DELETE FROM teams
 WHERE id = $1
 `
 
@@ -36,31 +36,31 @@ func (q *Queries) DeleteTeam(ctx context.Context, id int64) error {
 }
 
 const getTeam = `-- name: GetTeam :one
-SELECT id, name, created_at FROM task_manager_teams
+SELECT id, name, created_at FROM teams
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetTeam(ctx context.Context, id int64) (TaskManagerTeam, error) {
+func (q *Queries) GetTeam(ctx context.Context, id int64) (Team, error) {
 	row := q.db.QueryRow(ctx, getTeam, id)
-	var i TaskManagerTeam
+	var i Team
 	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
 	return i, err
 }
 
 const listTeam = `-- name: ListTeam :many
-SELECT id, name, created_at FROM task_manager_teams
+SELECT id, name, created_at FROM teams
 ORDER BY name
 `
 
-func (q *Queries) ListTeam(ctx context.Context) ([]TaskManagerTeam, error) {
+func (q *Queries) ListTeam(ctx context.Context) ([]Team, error) {
 	rows, err := q.db.Query(ctx, listTeam)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []TaskManagerTeam
+	var items []Team
 	for rows.Next() {
-		var i TaskManagerTeam
+		var i Team
 		if err := rows.Scan(&i.ID, &i.Name, &i.CreatedAt); err != nil {
 			return nil, err
 		}
@@ -73,7 +73,7 @@ func (q *Queries) ListTeam(ctx context.Context) ([]TaskManagerTeam, error) {
 }
 
 const updateTeam = `-- name: UpdateTeam :exec
-UPDATE task_manager_teams
+UPDATE teams
   set name = $2
 WHERE id = $1
 RETURNING id, name, created_at

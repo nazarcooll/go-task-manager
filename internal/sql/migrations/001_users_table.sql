@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS task_manager_users (
+CREATE TABLE IF NOT EXISTS users (
   id bigserial NOT NULL,
   password character varying(128) NOT NULL,
   last_login timestamp with time zone,
@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS task_manager_users (
   last_name character varying(150) NOT NULL,
   email character varying(254) NOT NULL,
   created_at timestamp with time zone NOT NULL,
-  CONSTRAINT task_manager_users_user_pkey PRIMARY KEY (id),
-  CONSTRAINT task_manager_users_user_username_key UNIQUE (username)
+  CONSTRAINT users_user_pkey PRIMARY KEY (id),
+  CONSTRAINT users_user_username_key UNIQUE (username)
 );
 ---- create above / drop below ----
-DROP TABLE task_manager_users
+DROP TABLE users

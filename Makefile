@@ -17,10 +17,13 @@ air:
 	@air -c attach-air.toml
 
 migration:
-	@cd internal/sql/migrations && tern new $(filter-out $@,$(MAKECMDGOALS))
+	tern new -m internal/sql/migrations $(filter-out $@,$(MAKECMDGOALS))
+
+migrate:
+	tern migrate -m internal/sql/migrations -d +1
 
 migrate-up:
-	cd internal/sql/migrations && tern migrate -d +1
+	tern migrate -m internal/sql/migrations -d +1
  
 migrate-down:
-	cd internal/sql/migrations && tern migrate -d -1
+	tern migrate -m internal/sql/migrations -d -1
